@@ -77,7 +77,7 @@ public class Compilador extends javax.swing.JFrame {
         textsColor = new ArrayList<>();
         identProd = new ArrayList<>();
         identificadores = new HashMap<>(); //el HashMap vacio para los identificadores
-        Functions.setAutocompleterJTextComponent(new String[]{"checha"}, jtpCode, () -> { //autocompleta las palabras clave, aun debemos asignarlas
+        Functions.setAutocompleterJTextComponent(new String[]{"checha"}, jtpCode, () -> { //con ctrl+space autocompleta las palabras clave, aun debemos asignarlas
             timerKeyReleased.restart();
         });
     }
@@ -260,7 +260,7 @@ public class Compilador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//CONFIGURACION DE BOTONES 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         directorio.New();
         clearFields();
@@ -268,8 +268,8 @@ public class Compilador extends javax.swing.JFrame {
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
         if (directorio.Open()) {
-            colorAnalysis();
-            clearFields();
+            colorAnalysis(); //asi le otorga colores a las palabras del archivo abierto
+            clearFields(); 
         }
     }//GEN-LAST:event_btnAbrirActionPerformed
 
@@ -287,22 +287,22 @@ public class Compilador extends javax.swing.JFrame {
 
     private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
         if (getTitle().contains("*") || getTitle().equals(title)) {
-            if (directorio.Save()) {
+            if (directorio.Save()) { //si se guarda bien llamamos al compile
                 compile();
             }
         } else {
-            compile();
+            compile(); //si no solo compila, NO MUEVAN LOS PUNTOS Y COMA XD
         }
     }//GEN-LAST:event_btnCompilarActionPerformed
 
     private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
         btnCompilar.doClick();
-        if (codeHasBeenCompiled) {
-            if (!errors.isEmpty()) {
+        if (codeHasBeenCompiled) { //solo funciona si se ha compilado correctamente
+            if (!errors.isEmpty()) { //en caso de error debe dar el anuncio
                 JOptionPane.showMessageDialog(null, "No se puede ejecutar el código ya que se encontró uno o más errores",
                         "Error en la compilación", JOptionPane.ERROR_MESSAGE);
             } else {
-                CodeBlock codeBlock = Functions.splitCodeInCodeBlocks(tokens, "{", "}", ";");
+                CodeBlock codeBlock = Functions.splitCodeInCodeBlocks(tokens, "{", "}", ";");  
                 System.out.println(codeBlock);
                 ArrayList<String> blocksOfCode = codeBlock.getBlocksOfCodeInOrderOfExec();
                 System.out.println(blocksOfCode);
@@ -311,10 +311,10 @@ public class Compilador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
-    private void compile() {
+    private void compile() { //llamamos a todos los metodos necesarios para el funcionamiento de la compilacion
         clearFields();
         lexicalAnalysis();
-        fillTableTokens();
+        fillTableTokens(); //llena la tabla de tokens
         syntacticAnalysis();
         semanticAnalysis();
         printConsole();
@@ -325,11 +325,11 @@ public class Compilador extends javax.swing.JFrame {
         // Extraer tokens
         Lexer lexer;
         try {
-            File codigo = new File("code.encrypter");
-            FileOutputStream output = new FileOutputStream(codigo);
+            File codigo = new File("code.encrypter"); 
+            FileOutputStream output = new FileOutputStream(codigo); //genera el archivo de salida
             byte[] bytesText = jtpCode.getText().getBytes();
-            output.write(bytesText);
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
+            output.write(bytesText); //escribe los bytes
+            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));  //enviamos el archivo codificado en UTF8 para los caracteres especiales
             lexer = new Lexer(entrada);
             while (true) {
                 Token token = lexer.yylex();
@@ -346,9 +346,9 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void syntacticAnalysis() {
-        Grammar gramatica = new Grammar(tokens, errors);
+        Grammar gramatica = new Grammar(tokens, errors); // estos parametros  son los arreglos
 
-        /* Mostrar gramáticas */
+        /* mostrar gramáticas */
         gramatica.show();
     }
 
@@ -356,16 +356,16 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void colorAnalysis() {
-        /* Limpiar el arreglo de colores */
+        // limpiar el arreglo de colores 
         textsColor.clear();
-        /* Extraer rangos de colores */
+        // extraer rangos de colores
         LexerColor lexerColor;
         try {
             File codigo = new File("color.encrypter");
             FileOutputStream output = new FileOutputStream(codigo);
             byte[] bytesText = jtpCode.getText().getBytes();
             output.write(bytesText);
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
+            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));  //estp es para los caracteres especiales y raros, como la ç
             lexerColor = new LexerColor(entrada);
             while (true) {
                 TextColor textColor = lexerColor.yylex();
@@ -379,7 +379,7 @@ public class Compilador extends javax.swing.JFrame {
         } catch (IOException ex) {
             System.out.println("Error al escribir en el archivo... " + ex.getMessage());
         }
-        Functions.colorTextPane(textsColor, jtpCode, new Color(40, 40, 40));
+        Functions.colorTextPane(textsColor, jtpCode, new Color(40, 40, 40)); //color negro, les paso la tabla de colores a ws
     }
 
     private void fillTableTokens() {
@@ -394,8 +394,8 @@ public class Compilador extends javax.swing.JFrame {
         if (sizeErrors > 0) {
             Functions.sortErrorsByLineAndColumn(errors);
             String strErrors = "\n";
-            for (ErrorLSSL error : errors) {
-                String strError = String.valueOf(error);
+            for (ErrorLSSL error : errors) { // ordena lso errores por numero de fila
+                String strError = String.valueOf(error); 
                 strErrors += strError + "\n";
             }
             jtaOutputConsole.setText("Compilación terminada...\n" + strErrors + "\nLa compilación terminó con errores...");
@@ -405,7 +405,7 @@ public class Compilador extends javax.swing.JFrame {
         jtaOutputConsole.setCaretPosition(0);
     }
 
-    private void clearFields() {
+    private void clearFields() { //este es para limpiar, borrar este comment cuando este todo bien
         Functions.clearDataInTable(tblTokens);
         jtaOutputConsole.setText("");
         tokens.clear();
@@ -440,13 +440,13 @@ public class Compilador extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        //</editor-fold> //esto es unicamente estetico, no le muevan XD
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                UIManager.setLookAndFeel(new FlatIntelliJLaf()); //aca le pongo el estilo
             } catch (UnsupportedLookAndFeelException ex) {
                 System.out.println("LookAndFeel no soportado: " + ex);
             }

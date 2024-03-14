@@ -1,5 +1,5 @@
 import compilerTools.TextColor;
-import java.awt.Color;
+import java.awt.Color; 
 
 %%
 %class LexerColor
