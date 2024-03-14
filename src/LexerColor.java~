@@ -3,7 +3,7 @@
 // source: src/LexerColor.flex
 
 import compilerTools.TextColor;
-import java.awt.Color;
+import java.awt.Color; 
 
 
 // See https://github.com/jflex-de/jflex/issues/222

@@ -34,4 +34,14 @@ Numero = 0 | [1-9][0-9]*
 /* Comentarios o espacios en blanco */
 {Comentario}|{EspacioEnBlanco} { /*Ignorar*/ }
 
+/* Identificador */
+\${Identificador} {return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);} 
+
+/* Tipo de Dato */
+número | 
+color { return token(yytext(), "TIPO_DATO", yyline, yycolumn);}
+
+/* Número */
+{Numero} { return token(yytext(), "NUMERO", yyline, yycolumn);}
+
 . { return token(yytext(), "ERROR", yyline, yycolumn); } 
