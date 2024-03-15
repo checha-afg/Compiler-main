@@ -14,7 +14,7 @@ import compilerTools.Token;
 TerminadorDeLinea = \r|\n|\r\n
 EntradaDeCaracter = [^\r\n]
 EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
-ComentarioTradicional = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+ComentarioTradicional = "#"
 FinDeLineaComentario = "//" {EntradaDeCaracter}* {TerminadorDeLinea}?
 ContenidoComentario = ( [^*] | \*+ [^/*] )*
 ComentarioDeDocumentacion = "/**" {ContenidoComentario} "*"+ "/"
@@ -22,7 +22,7 @@ ComentarioDeDocumentacion = "/**" {ContenidoComentario} "*"+ "/"
 /* Comentario */
 Comentario = {ComentarioTradicional} | {FinDeLineaComentario} | {ComentarioDeDocumentacion}
 
-/* Identificador */
+/* Texto */
 Letra = [A-Za-zÑñ_ÁÉÍÓÚáéíóúÜü]
 Digito = [0-9]
 Identificador = {Letra}({Letra}|{Digito})*
@@ -33,6 +33,8 @@ Numero = 0 | [1-9][0-9]*
 
 /* Comentarios o espacios en blanco */
 {Comentario}|{EspacioEnBlanco} { /*Ignorar*/ }
+
+/* Esta parte define el tipo de componente lexico */
 
 /* Identificador */
 \${Identificador} {return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);} 
