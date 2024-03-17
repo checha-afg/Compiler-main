@@ -1,1 +1,17 @@
-23
+#X,#Y;
+$gato
++perico
+#X=7
+#Y=#X*5+1-3/2
+#Y>#X
+//si funciona el comentario waos\n
+for
+do-while
+break continue
+if else-if
+end-if
+3.14;
+"palabra"
+true false
+()
+{}
