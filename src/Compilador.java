@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -348,6 +353,8 @@ public class Compilador extends javax.swing.JFrame {
     private void syntacticAnalysis() {
         Grammar gramatica = new Grammar(tokens, errors); // estos parametros  son los arreglos
 
+        /* elininacion de errores */
+        gramatica.delete(new String[]{"ERROR", "ERROR_1", "ERROR_2"}, 1);
         /* mostrar gramáticas */
         gramatica.show();
     }
@@ -453,6 +460,8 @@ public class Compilador extends javax.swing.JFrame {
             new Compilador().setVisible(true);
         });
     }
+    
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrir;
