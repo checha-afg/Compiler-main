@@ -19,9 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -54,7 +52,101 @@ public class Compilador extends javax.swing.JFrame {
         initComponents();
         init();
     }
+    
+    //genera tabla HTML
+    private void generarTablaHTML(ArrayList<Token> tokens, String nombreArchivo) {
+    try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo));
 
+        writer.write("<!DOCTYPE html>");
+        writer.write("<html>");
+        writer.write("<head>");
+        writer.write("<title>Tabla de Tokens</title>");
+        writer.write("</head>");
+        writer.write("<body>");
+        writer.write("<h1>Tabla de Tokens</h1>");
+        writer.write("<table border=\"1\">");
+        writer.write("<tr>");
+        writer.write("<th>Componente Léxico</th>");
+        writer.write("<th>Lexema</th>");
+        writer.write("<th>Línea</th>");
+        writer.write("<th>Columna</th>");
+        writer.write("</tr>");
+
+        for (Token token : tokens) {
+            writer.write("<tr>");
+            writer.write("<td>" + token.getLexicalComp() + "</td>");
+            writer.write("<td>" + token.getLexeme() + "</td>");
+            writer.write("<td>" + token.getLine() + "</td>");
+            writer.write("<td>" + token.getColumn() + "</td>");
+            writer.write("</tr>");
+        }
+
+        writer.write("</table>");
+        writer.write("</body>");
+        writer.write("</html>");
+
+        writer.close();
+    } catch (IOException e) {
+        System.err.println("Error al escribir el archivo HTML: " + e.getMessage());
+    }
+}
+private void generarBitacoraHTML(ArrayList<Token> tokens, String nombreArchivo) {
+    try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo));
+
+        writer.write("<!DOCTYPE html>");
+        writer.write("<html>");
+        writer.write("<head>");
+        writer.write("<title>Bitácora de Tokens</title>");
+        writer.write("</head>");
+        writer.write("<body>");
+        writer.write("<h1>Bitácora de Tokens</h1>");
+        writer.write("<table border=\"1\">");
+        writer.write("<tr>");
+        writer.write("<th>Número</th>");
+        writer.write("<th>Nombre</th>");
+        writer.write("<th>Descripción</th>");
+        writer.write("<th>Hora</th>");
+        writer.write("<th>Fecha</th>");
+        writer.write("</tr>");
+
+        // Iterar sobre los tokens para registrar cada uno en la bitácora
+        for (int i = 0; i < tokens.size(); i++) {
+            Token token = tokens.get(i);
+            writer.write("<tr>");
+            writer.write("<td>" + (i+1) + "</td>"); // Número
+            writer.write("<td>" + token.getLexicalComp() + "</td>"); // Nombre
+            writer.write("<td>" + token.getLexeme() + "</td>"); // Descripción
+            writer.write("<td>" + obtenerHoraActual() + "</td>"); // Hora
+            writer.write("<td>" + obtenerFechaActual() + "</td>"); // Fecha
+            writer.write("</tr>");
+        }
+
+        writer.write("</table>");
+        writer.write("</body>");
+        writer.write("</html>");
+
+        writer.close();
+    } catch (IOException e) {
+        System.err.println("Error al escribir el archivo HTML de la bitácora de tokens: " + e.getMessage());
+    }
+}
+
+// Método para obtener la hora actual
+private String obtenerHoraActual() {
+    java.util.Date fecha = new java.util.Date();
+    java.text.SimpleDateFormat formatoHora = new java.text.SimpleDateFormat("HH:mm:ss");
+    return formatoHora.format(fecha);
+}
+
+// Método para obtener la fecha actual
+private String obtenerFechaActual() {
+    java.util.Date fecha = new java.util.Date();
+    java.text.SimpleDateFormat formatoFecha = new java.text.SimpleDateFormat("dd/MM/yyyy");
+    return formatoFecha.format(fecha);
+}
+    
     private void init() { //parte grafica
         title = "Compilador";
         setLocationRelativeTo(null);
@@ -394,6 +486,9 @@ public class Compilador extends javax.swing.JFrame {
             Object[] data = new Object[]{token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
             Functions.addRowDataInTable(tblTokens, data);
         });
+        generarTablaHTML(tokens, "tabla_tokens.html");
+        generarBitacoraHTML(tokens, "bitacora_tokens.html");
+        
     }
 
     private void printConsole() {
@@ -462,6 +557,7 @@ public class Compilador extends javax.swing.JFrame {
     }
     
  
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrir;
@@ -480,4 +576,5 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JPanel rootPanel;
     private javax.swing.JTable tblTokens;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -27,11 +27,9 @@ Letra = [A-Za-zÑñ_ÁÉÍÓÚáéíóúÜü]
 Digito = [0-9]
 Identificador = {Letra}({Letra}|{Digito})*
 
-/* Número entero */
+/* Números */
 NumeroEnt = 0 | [1-9][0-9]*
-
-/* Número flotante */
-NumeroFlot = [0-9]+(\.[0-9]+)?
+NumeroFlot = ([1-9][0-9]*|0\.[0-9]+)
 
 /* Cadena */
 Cadena = \"([^\"\\]|\\.)*\"
@@ -109,4 +107,14 @@ FinCondicional = (end-if)
 {Condicional} { return token(yytext(), "CONDICIONAL", yyline, yycolumn);}
 {FinCondicional} { return token(yytext(), "FIN_CONDICIONAL", yyline, yycolumn);}
 
-. { return token(yytext(), "ERROR", yyline, yycolumn); } 
+/* Final */
+final { return token(yytext(), "FINAL", yyline, yycolumn);}
+
+/* Numero erroneo */ 
+0{NumeroEnt} { return token(yytext(), "ERROR_1", yyline, yycolumn);}
+0{NumeroFlot} { return token(yytext(), "ERROR_1", yyline, yycolumn);}
+
+/* Identificador erroneo */
+{Identificador} {return token(yytext(), "ERROR_2", yyline, yycolumn);}
+
+. { return token(yytext(), "ERROR_???", yyline, yycolumn); } 
