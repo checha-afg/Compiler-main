@@ -17,10 +17,10 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#"
 FinDeLineaComentario = "//" {EntradaDeCaracter}* {TerminadorDeLinea}?
 ContenidoComentario = ( [^*] | \*+ [^/*] )*
-ComentarioDeDocumentacion = "/**" {ContenidoComentario} "*"+ "/"
+ComentarioDeDocumentacion = "/*" {ContenidoComentario} "*/"
 
 /* Comentario */
-Comentario = {ComentarioTradicional} | {FinDeLineaComentario} | {ComentarioDeDocumentacion}
+Comentario = {FinDeLineaComentario} | {ComentarioDeDocumentacion}
 
 /* Texto */
 Letra = [A-Za-zÑñ_ÁÉÍÓÚáéíóúÜü]
