@@ -19,6 +19,8 @@ FinDeLineaComentario = "//" {EntradaDeCaracter}* {TerminadorDeLinea}?
 ContenidoComentario = ( [^*] | \*+ [^/*] )*
 ComentarioDeDocumentacion = "/*" {ContenidoComentario} "*/"
 
+
+
 /* Comentario */
 Comentario = {FinDeLineaComentario} | {ComentarioDeDocumentacion}
 
@@ -29,7 +31,7 @@ Identificador = {Letra}({Letra}|{Digito})*
 
 /* Números */
 NumeroEnt = 0 | [1-9][0-9]*
-NumeroFlot = ([1-9][0-9]*|0\.[0-9]+)
+NumeroFlot = ([0-9]\.[0-9]+)
 
 /* Cadena */
 Cadena = \"([^\"\\]|\\.)*\"
@@ -72,6 +74,9 @@ FinCondicional = (end-if)
 \#{Identificador} {return token(yytext(), "VARIABLE", yyline, yycolumn);} 
 \${Identificador} {return token(yytext(), "FUNCION", yyline, yycolumn);} 
 \+{Identificador} {return token(yytext(), "OBJETO", yyline, yycolumn);} 
+
+/*tipo de dato*/
+entero|cadena|flotante|booleano {return token(yytext(), "TIPO_DATO", yyline, yycolumn);}
 
 /* Números */
 {NumeroEnt} { return token(yytext(), "ENTERO", yyline, yycolumn);}

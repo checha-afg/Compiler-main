@@ -447,6 +447,18 @@ private String obtenerFechaActual() {
 
         /* elininacion de errores */
         gramatica.delete(new String[]{"ERROR", "ERROR_1", "ERROR_2"}, 1);
+        
+        /*agrupacion de valores*/
+        gramatica.group("VALOR","(ENTERO|FLOTANTE)", true);
+        
+        /*declaracion de variabls*/
+        gramatica.group("VARIABLES","TIPO_DATO VARIABLE ASIGNACION VALOR", true);
+        gramatica.group(
+                "VARIABLES","TIPO_DATO ASIGNACION VALOR",
+                true,
+                2,
+                "Error Sintacicto, falta el identificador en la variable");
+        
         /* mostrar gramáticas */
         gramatica.show();
     }
