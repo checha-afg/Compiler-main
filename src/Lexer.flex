@@ -63,6 +63,11 @@ InstCiclo = (break|continue)
 Condicional = (if|else|else-if)
 FinCondicional = (end-if)
 
+/* Funciones */
+Mostrar = mostrar
+Hacer = hacer|hacermientras
+Para = para
+
 %%
 
 /* Comentarios o espacios en blanco */
@@ -111,6 +116,11 @@ entero|cadena|flotante|booleano {return token(yytext(), "TIPO_DATO", yyline, yyc
 /* Condicional */
 {Condicional} { return token(yytext(), "CONDICIONAL", yyline, yycolumn);}
 {FinCondicional} { return token(yytext(), "FIN_CONDICIONAL", yyline, yycolumn);}
+
+/* Funciones */
+{Mostrar} { return token(yytext(), "MOSTRAR", yyline, yycolumn);}
+{Hacer} { return token(yytext(), "HACER", yyline, yycolumn);}
+{Para} { return token(yytext(), "PARA", yyline, yycolumn);}
 
 /* Final */
 final { return token(yytext(), "FINAL", yyline, yycolumn);}

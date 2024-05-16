@@ -455,34 +455,51 @@ private String obtenerFechaActual() {
         gramatica.group("VARIABLES","TIPO_DATO VARIABLE ASIGNACION VALOR", true);
         
         /*errores en variables*/
-        gramatica.group(
-                "VARIABLES",
+        gramatica.group("VARIABLES",
                 "TIPO_DATO ASIGNACION VALOR",
                 true,
                 2,
                 "ERROR SINTACTICO: Falta el identificador o la variable [#, %]");
-        gramatica.group(
-                "VARIABLES",
+        gramatica.group("VARIABLES",
                 "TIPO_DATO VARIABLE ASIGNACION",
                 true,
                 3,
                 "ERROR SINTACTICO: Falta el valor en la declaracion [#, %]");
-        gramatica.group(
-                "VARIABLES",
+        gramatica.group("VARIABLES",
                 "VARIABLE ASIGNACION VALOR",
                 true,
                 4,
                 "ERROR SINTACTICO: Falta el tipo de dato en la declaracion [#, %]");
-        gramatica.group(
-                "VARIABLES",
+        gramatica.group("VARIABLES",
                 "TIPO_DATO VARIABLE VALOR",
                 true,
                 5,
                 "ERROR SINTACTICO: Falta el operador de asignacion en la declaracion [#, %]");
         
-        /*eliminacion de tipos de dato y signos de asignacion, motivos de depuracion y evitar dejar esta clase de tokens sueltos*/
+        /*eliminacion de tipos de dato y signos de asignacion cuando no estan en una declaracion*/
         gramatica.delete("TIPO_DATO",6,"ERROR SINTACTICO: El tipo de dato no esta en una declaracion [#, %]");
         gramatica.delete("ASIGNACION",7,"ERROR SINTACTICO: El operador no esta en una declaracion [#, %]");
+        
+        /*agrupacion de identificadore y definicion de parametros*/
+        gramatica.group("VALOR","IDENTIFICADOR",true);
+        gramatica.group("PARAMETROS", "VALOR(COMA,VALOR)+"); /*el + indica que se puede repetir n veces*/
+        
+        /*funciones*/
+        gramatica.group("FUNCION","(MOSTRAR|HACER|PARA)",true);
+        gramatica.group("FUNCION_COMP","FUNCION PARENTESIS_APERTURA (VALOR|PARAMETROS)? PARENTESIS_CIERRE",true);
+        
+        /*errores en funciones*/
+        gramatica.group("FUNCION_COMP",
+                "FUNCION (VALOR|PARAMETROS)? PARENTESIS_CIERRE",
+                true,
+                8,
+                "ERROR SINTACTICO: falta el parentesis de apertura [#, %]");
+        gramatica.group("FUNCION_COMP",
+                "FUNCION PARENTESIS_APERTURA (VALOR|PARAMETROS)?",
+                true,
+                8,
+                "ERROR SINTACTICO: falta el parentesis de cierre [#, %]");
+        
         
         /* mostrar gramáticas */
         gramatica.show();
