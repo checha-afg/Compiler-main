@@ -8,4 +8,7 @@ entero variable = 45
 entero #variable 45
 
 entero
-=
+
+45,45,45
+
+mostrar(45,45 )
